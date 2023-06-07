@@ -1,6 +1,7 @@
 package com.akshay.blog.services.impl;
 
 import com.akshay.blog.entities.User;
+import com.akshay.blog.exceptions.ResourceNotFoundException;
 import com.akshay.blog.payloads.UserDto;
 import com.akshay.blog.repositories.UserRepo;
 import com.akshay.blog.services.UserService;
@@ -20,8 +21,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserDto user, int userId) {
-        return null;
+    public UserDto updateUser(UserDto userDto, int userId) {
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
+        user.setId(userDto.getId());
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(userDto.getPassword());
+        user.setAbout(userDto.getAbout());
+        return this.userToDto(user);
     }
 
     @Override
