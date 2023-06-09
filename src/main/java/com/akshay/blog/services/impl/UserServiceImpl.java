@@ -5,6 +5,7 @@ import com.akshay.blog.exceptions.ResourceNotFoundException;
 import com.akshay.blog.payloads.UserDto;
 import com.akshay.blog.repositories.UserRepo;
 import com.akshay.blog.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Autowired
     private UserRepo userRepo;
@@ -26,7 +29,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, int userId) {
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
-        user.setId(userDto.getId());
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());
@@ -55,22 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private User dtoToUser(UserDto userDto) {
-        User user = new User();
-        user.setId(userDto.getId());
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
-        user.setAbout(userDto.getAbout());
-        return user;
+        return this.modelMapper.map(userDto, User.class);
     }
 
     private UserDto userToDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setPassword(user.getPassword());
-        userDto.setAbout(user.getAbout());
-        return userDto;
+        return this.modelMapper.map(user, UserDto.class);
     }
 }
