@@ -13,8 +13,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,23 +44,35 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post updatePost(PostDto postDto, Integer postId) {
-        return null;
+    public PostDto updatePost(PostDto postDto, Integer postId) {
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
+        post.setTitle(postDto.getTitle());
+        post.setContent(postDto.getContent());
+        post.setImageName("default.png");
+        post.setAddedDate(new Date());
+        post.setUser(this.modelMapper.map(postDto.getUser(), User.class));
+        post.setCategory(this.modelMapper.map(postDto.getCategory(), Category.class));
+        Post updatedPost = this.postRepo.save(post);
+        return this.modelMapper.map(updatedPost, PostDto.class);
     }
 
     @Override
-    public Post getPostById(Integer postId) {
-        return null;
+    public PostDto getPostById(Integer postId) {
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
+        return this.modelMapper.map(post, PostDto.class);
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return null;
+    public List<PostDto> getAllPosts() {
+        List<Post> posts = this.postRepo.findAll();
+        List<PostDto> postDtos = posts.stream().map(post -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return postDtos;
     }
 
     @Override
     public void deletePost(Integer postId) {
-
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
+        this.postRepo.delete(post);
     }
 
     @Override
@@ -79,6 +93,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPost(String name) {
-        return null;
+        List<Post> posts = this.postRepo.findAll();
+        List<PostDto> result = new ArrayList<>();
+        for(Post post : posts) {
+            if(Objects.equals(post.getTitle(), name)) {
+                result.add(this.modelMapper.map(post, PostDto.class));
+            }
+        }
+        return result;
     }
 }
