@@ -11,6 +11,9 @@ import com.akshay.blog.repositories.UserRepo;
 import com.akshay.blog.services.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -48,10 +51,7 @@ public class PostServiceImpl implements PostService {
         Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
         post.setTitle(postDto.getTitle());
         post.setContent(postDto.getContent());
-        post.setImageName("default.png");
-        post.setAddedDate(new Date());
-        post.setUser(this.modelMapper.map(postDto.getUser(), User.class));
-        post.setCategory(this.modelMapper.map(postDto.getCategory(), Category.class));
+        post.setImageName(postDto.getImageName());
         Post updatedPost = this.postRepo.save(post);
         return this.modelMapper.map(updatedPost, PostDto.class);
     }
@@ -63,8 +63,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts = this.postRepo.findAll();
+    public List<PostDto> getAllPosts(Integer pageNumber, Integer pageSize) {
+        Pageable p = PageRequest.of(pageNumber, pageSize);
+        Page<Post> pagePost = this.postRepo.findAll(p);
+        List<Post> posts = pagePost.getContent();
         List<PostDto> postDtos = posts.stream().map(post -> this.modelMapper.map(post, PostDto.class)).collect(Collectors.toList());
         return postDtos;
     }
