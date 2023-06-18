@@ -96,12 +96,12 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> searchPost(String name) {
         List<Post> posts = this.postRepo.findAll();
-        List<PostDto> result = new ArrayList<>();
+        List<PostDto> searchResult = new ArrayList<>();
         for(Post post : posts) {
             if(Objects.equals(post.getTitle(), name)) {
-                result.add(this.modelMapper.map(post, PostDto.class));
+                searchResult.add(this.modelMapper.map(post, PostDto.class));
             }
         }
-        return result;
+        return searchResult;
     }
 }
