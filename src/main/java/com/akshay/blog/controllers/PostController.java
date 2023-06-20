@@ -62,5 +62,8 @@ public class PostController {
         return ResponseEntity.ok(updatedPostDto);
     }
 
-
+    @GetMapping("/posts/{name}")
+    public ResponseEntity<List<PostDto>> searchPost(@PathVariable String name) {
+        return ResponseEntity.ok(this.postService.searchPost(name));
+    }
 }
