@@ -14,4 +14,5 @@ public class CommentDto {
     @NotEmpty
     private String content;
     private UserDto user;
+    private PostDto post;
 }

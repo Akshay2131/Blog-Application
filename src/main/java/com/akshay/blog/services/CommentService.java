@@ -12,4 +12,5 @@ public interface CommentService {
     List<CommentDto> getAllComments(Integer pageNumber, Integer pageSize);
     void deleteComment(Integer commentId);
     List<CommentDto> getCommentsByUser(Integer userId);
+    List<CommentDto> getCommentsByPost(Integer postId);
 }

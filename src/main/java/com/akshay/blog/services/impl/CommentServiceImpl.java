@@ -1,10 +1,12 @@
 package com.akshay.blog.services.impl;
 
 import com.akshay.blog.entities.Comment;
+import com.akshay.blog.entities.Post;
 import com.akshay.blog.entities.User;
 import com.akshay.blog.exceptions.ResourceNotFoundException;
 import com.akshay.blog.payloads.CommentDto;
 import com.akshay.blog.repositories.CommentRepo;
+import com.akshay.blog.repositories.PostRepo;
 import com.akshay.blog.repositories.UserRepo;
 import com.akshay.blog.services.CommentService;
 import org.modelmapper.ModelMapper;
@@ -25,6 +27,8 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepo commentRepo;
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private PostRepo postRepo;
 
     @Override
     public CommentDto createComment(CommentDto commentDto, Integer userId) {
@@ -68,6 +72,14 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getCommentsByUser(Integer userId) {
         User user = this.userRepo.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user", "id", userId));
         List<Comment> comments = this.commentRepo.findByUser(user);
+        List<CommentDto> commentDtos = comments.stream().map(comment -> this.modelMapper.map(comment, CommentDto.class)).collect(Collectors.toList());
+        return commentDtos;
+    }
+
+    @Override
+    public List<CommentDto> getCommentsByPost(Integer postId) {
+        Post post = this.postRepo.findById(postId).orElseThrow(() -> new ResourceNotFoundException("post", "id", postId));
+        List<Comment> comments = this.commentRepo.findByPost(post);
         List<CommentDto> commentDtos = comments.stream().map(comment -> this.modelMapper.map(comment, CommentDto.class)).collect(Collectors.toList());
         return commentDtos;
     }
