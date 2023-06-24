@@ -2,6 +2,7 @@ package com.akshay.blog.controllers;
 
 import com.akshay.blog.payloads.ApiResponse;
 import com.akshay.blog.payloads.PostDto;
+import com.akshay.blog.payloads.PostResponse;
 import com.akshay.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.akshay.blog.config.AppConstants.*;
 
 @RestController
 @RequestMapping("/api/")
@@ -38,11 +41,13 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public ResponseEntity<List<PostDto>> getAllPosts(
-            @RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-            @RequestParam(value= "pageSize", defaultValue = "5", required = false) Integer pageSize
+    public ResponseEntity<PostResponse> getAllPosts(
+            @RequestParam(value = "pageNumber", defaultValue = PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value= "pageSize", defaultValue = PAGE_SIZE, required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = SORT_DIR, required = false) String sortDir
     ) {
-        return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize));
+        return ResponseEntity.ok(this.postService.getAllPosts(pageNumber, pageSize, sortBy, sortDir));
     }
 
     @GetMapping("/posts/{postId}")
@@ -62,8 +67,8 @@ public class PostController {
         return ResponseEntity.ok(updatedPostDto);
     }
 
-    @GetMapping("/posts/{name}")
-    public ResponseEntity<List<PostDto>> searchPost(@PathVariable String name) {
-        return ResponseEntity.ok(this.postService.searchPost(name));
+    @GetMapping("/posts/search/{keywords}")
+    public ResponseEntity<List<PostDto>> searchPostByTitle(@PathVariable String keywords) {
+        return ResponseEntity.ok(this.postService.searchPost(keywords));
     }
 }
