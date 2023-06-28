@@ -41,13 +41,13 @@ public class PostController {
     }
 
     @GetMapping("/user/{userId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable Integer userId) {
+    public ResponseEntity<List<PostDto>> getPostsByUser(@PathVariable("userId") Integer userId) {
         List<PostDto> postDtos= this.postService.getPostsByUser(userId);
         return ResponseEntity.ok(postDtos);
     }
 
     @GetMapping("/category/{categoryId}/posts")
-    public ResponseEntity<List<PostDto>> getPostsBycategory(@PathVariable Integer categoryId) {
+    public ResponseEntity<List<PostDto>> getPostsByCategory(@PathVariable("categoryId") Integer categoryId) {
         List<PostDto> postDtos= this.postService.getPostsByCategory(categoryId);
         return ResponseEntity.ok(postDtos);
     }
@@ -87,7 +87,7 @@ public class PostController {
     @PostMapping("/post/image/upload/{postId}")
     public ResponseEntity<PostDto> fileUpload(
             @RequestParam("image")MultipartFile image,
-            @PathVariable Integer postId) throws IOException {
+            @PathVariable("postId") Integer postId) throws IOException {
         String fileName = this.fileService.uploadImage(path, image);
         PostDto postDto = this.postService.getPostById(postId);
         postDto.setImageName(fileName);
@@ -97,7 +97,7 @@ public class PostController {
 
     @GetMapping(value = "/post/images/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
     public void downloadImage(
-            @PathVariable String imageName,
+            @PathVariable("imageName") String imageName,
             HttpServletResponse response
     ) throws IOException {
         InputStream resource = this.fileService.getResource(path, imageName);
