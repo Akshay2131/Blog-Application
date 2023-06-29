@@ -6,6 +6,7 @@ import com.akshay.blog.payloads.PostResponse;
 import com.akshay.blog.services.FileService;
 import com.akshay.blog.services.PostService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,7 +34,7 @@ public class PostController {
 
     @PostMapping("/user/{userId}/category/{categoryId}/posts")
     public ResponseEntity<PostDto> createPost(
-            @RequestBody PostDto postDto,
+            @Valid @RequestBody PostDto postDto,
             @PathVariable("userId") Integer uId,
             @PathVariable("categoryId") Integer cId) {
         PostDto createdPostDto = this.postService.createPost(postDto, uId, cId);
@@ -74,7 +75,7 @@ public class PostController {
     }
 
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostDto> updatePost(@RequestBody PostDto postDto, @PathVariable("postId") Integer pid) {
+    public ResponseEntity<PostDto> updatePost(@Valid @RequestBody PostDto postDto, @PathVariable("postId") Integer pid) {
         PostDto updatedPostDto = this.postService.updatePost(postDto, pid);
         return ResponseEntity.ok(updatedPostDto);
     }
