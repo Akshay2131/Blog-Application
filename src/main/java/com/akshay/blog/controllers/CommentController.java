@@ -24,12 +24,12 @@ public class CommentController {
     }
 
     @GetMapping("/user/{userId}/comments")
-    public ResponseEntity<List<CommentDto>> getCommentsByUser(@PathVariable Integer userId) {
+    public ResponseEntity<List<CommentDto>> getCommentsByUser(@PathVariable("userId") Integer userId) {
         return ResponseEntity.ok(this.commentService.getCommentsByUser(userId));
     }
 
     @GetMapping("/post/{postId}/comments")
-    public ResponseEntity<List<CommentDto>> getCommentsByPost(@PathVariable Integer postId) {
+    public ResponseEntity<List<CommentDto>> getCommentsByPost(@PathVariable("postId") Integer postId) {
         return ResponseEntity.ok(this.commentService.getCommentsByPost(postId));
     }
 
