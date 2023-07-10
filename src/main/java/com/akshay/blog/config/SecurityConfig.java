@@ -47,7 +47,6 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers(PUBLIC_URLS).permitAll()
-                .antMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()
