@@ -100,12 +100,13 @@
             <version>3.0.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-json -->
         <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>2.15.2</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+            <version>3.1.0</version>
         </dependency>
+
 
     </dependencies>
 
