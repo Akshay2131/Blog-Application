@@ -10,7 +10,6 @@ import java.util.Set;
 @Data
 public class Role {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer Id;
     private String name;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
