@@ -3,3 +3,5 @@
 
 -> Developed endpoints for user authentication, blog post creation, retrieval, and management, and other related features
 
+-> Implemented secure authentication and authorization mechanisms for the blog application
+
